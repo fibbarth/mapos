@@ -8,9 +8,9 @@ class Produtos_model extends CI_Model {
     
     function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array'){
         
-        $this->db->select($fields);
+        $this->db->select($fields." ,round( precoVenda / precoCompra, 5 )-1 as porcentagem ", False);
         $this->db->from($table);
-        $this->db->order_by('idProdutos','desc');
+        $this->db->order_by('descricao','asc');
         $this->db->limit($perpage,$start);
         if($where){
             $this->db->where($where);
@@ -23,6 +23,7 @@ class Produtos_model extends CI_Model {
     }
 
     function getById($id){
+		$this->db->select("*, round( precoVenda / precoCompra, 5 )-1 as porcentagem", False);
         $this->db->where('idProdutos',$id);
         $this->db->limit(1);
         return $this->db->get('produtos')->row();

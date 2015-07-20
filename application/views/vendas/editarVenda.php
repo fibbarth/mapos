@@ -1,7 +1,5 @@
 <link rel="stylesheet" href="<?php echo base_url();?>js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-
-
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -37,7 +35,6 @@
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>"  />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>"  />
-                                            <input id="valorTotal" type="hidden" name="valorTotal" value=""  />
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
@@ -93,7 +90,7 @@
                                                     <th>Produto</th>
                                                     <th>Quantidade</th>
                                                     <th>Ações</th>
-                                                    <th>Sub-total</th>
+                                                    <th>Subtotal</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -111,8 +108,16 @@
                                                 }?>
                                                
                                                 <tr>
+                                                    <td colspan="3" style="text-align: right"><strong>Sub-total:</strong></td>
+                                                    <td><strong>R$ <?php echo number_format($total,2,'.','.');?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total,2); ?>"></td>
+                                                </tr>
+												<tr>
+                                                    <td colspan="3" style="text-align: right"><strong>Desconto:</strong></td>
+                                                    <td><strong>R$ <?php echo number_format($result->desconto,2,'.','.'); ?></strong></td>
+                                                </tr>
+												<tr>
                                                     <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                                    <td><strong>R$ <?php echo number_format($total,2,',','.');?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total,2); ?>"></td>
+                                                    <td><strong>R$ <?php echo number_format(($total-$result->desconto),2,'.','.');?></strong> <input type="hidden" id="total-final" value="<?php echo number_format($result->desconto,2); ?>"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -170,15 +175,23 @@
       <div class="span4" style="margin-left: 0">  
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" /> 
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total,2); ?> "  />
+        <input class="span12 money" id="valorSemDesconto" type="text" name="valorSemDesconto" value="<?php echo number_format($total,2); ?>"  readonly="readonly" />
       </div>
-      <div class="span4" >
+	  <div class="span4">  
+        <label for="valor">Desconto (R$)*</label>
+        <input class="span12 money" id="desconto" type="text" name="desconto" value="<?php echo $result->desconto; ?>"  />
+      </div>
+	  <div class="span4">
+        <label for="valor">Valor final*</label>	
+        <input class="span12 money" id="valor" type="text" name="valor" value=""  readonly="readonly" />
+      </div>
+    </div>
+	<div class="span12" style="margin-left: 0">
+	  <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>
         <input class="span12 datepicker" id="vencimento" type="text" name="vencimento"  />
       </div>
-      
-    </div>
-    
+	</div>
     <div class="span12" style="margin-left: 0"> 
       <div class="span4" style="margin-left: 0">
         <label for="recebido">Recebido?</label>
@@ -233,10 +246,34 @@ $(document).ready(function(){
 
      $(document).on('click', '#btn-faturar', function(event) {
        event.preventDefault();
-         valor = $('#total-venda').val();
-         valor = valor.replace(',', '' );
-         $('#valor').val(valor);
+	   if( $('#total').val() > 0){
+		return;
+	   }
+	   $('#valor').val($('#total-venda').val());
+	   $('#valorSemDesconto').val($('#total-venda').val());
+	   $('#desconto').keyup();
      });
+
+	 $('#desconto').keyup(function(e){
+		var code = e.keyCode || e.which;
+		if( code == 9 ){
+			return;
+        }
+		var desconto = $('#desconto').val();
+        var valor = $('#valorSemDesconto').val();
+	    if( desconto > 0 ){
+			var valorFinal = valor - desconto;
+			if( valorFinal < 0 ){
+				alert('Desconto dado maior que o valor total da venda.')
+				$(this).focus();
+				$(this).val(0);
+				return;
+			}
+			$('#valor').val(valorFinal.toFixed(2));
+			return;
+	    }
+        $('#valor').val(valor.toFixed(2));
+	 });
      
      $("#formFaturar").validate({
           rules:{

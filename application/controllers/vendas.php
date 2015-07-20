@@ -133,7 +133,6 @@ class Vendas extends CI_Controller {
             } catch (Exception $e) {
                $dataVenda = date('Y/m/d'); 
             }
-
             $data = array(
                 'dataVenda' => $dataVenda,
                 'usuarios_id' => $this->input->post('usuarios_id'),
@@ -296,7 +295,6 @@ class Vendas extends CI_Controller {
 
 
     public function faturar() {
-
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eVenda')){
               $this->session->set_flashdata('error','Você não tem permissão para editar Vendas');
               redirect(base_url());
@@ -339,14 +337,14 @@ class Vendas extends CI_Controller {
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo')
             );
-
-            if ($this->vendas_model->add('lancamentos',$data) == TRUE) {
-                
+			$lancamentos_id = $this->vendas_model->add('lancamentos',$data, true);
+            if ( $lancamentos_id ) {
                 $venda = $this->input->post('vendas_id');
 
                 $this->db->set('faturado',1);
-                $this->db->set('valorTotal',$this->input->post('valor'));
-                $this->db->where('idVendas', $venda);
+                $this->db->set('desconto', $this->input->post('desconto'));
+				$this->db->set('lancamentos_id', $lancamentos_id);
+				$this->db->where('idVendas', $venda);
                 $this->db->update('vendas');
 
                 $this->session->set_flashdata('success','Venda faturada com sucesso!');

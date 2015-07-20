@@ -62,7 +62,7 @@ class Mapos_model extends CI_Model {
 
          // buscando produtos
          $this->db->like('descricao',$termo);
-         $this->db->limit(5);
+         //$this->db->limit(5);
          $data['produtos'] = $this->db->get('produtos')->result();
 
          //buscando serviços

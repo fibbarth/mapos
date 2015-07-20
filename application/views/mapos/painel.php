@@ -45,7 +45,7 @@
         
         <div class="widget-box">
             <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Produtos Com Estoque Mínimo</h5></div>
-            <div class="widget-content">
+            <div class="widget-content" style="overflow:auto; height:400px;">
                 <table class="table table-bordered">
                     <thead>
                         <tr>

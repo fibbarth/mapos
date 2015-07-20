@@ -105,7 +105,9 @@
                 
                         <hr />
                     
-                        <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos,2,',','.');?></h4>
+                        <h4 style="text-align: right">Subtotal: R$ <?php echo number_format($totalProdutos,2,',','.');?></h4>
+						<h4 style="text-align: right">Desconto: R$ <?php echo number_format($result->desconto,2,',','.');?></h4>
+						<h3 style="text-align: right">Total: R$ <?php echo number_format($totalProdutos-$result->desconto,2,',','.');?></h3>
 
                     </div>
             

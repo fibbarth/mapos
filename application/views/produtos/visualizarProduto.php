@@ -27,6 +27,10 @@
                             <td style="text-align: right"><strong>Preço de Venda</strong></td>
                             <td>R$ <?php echo $result->precoVenda; ?></td>
                         </tr>
+						<tr>
+                            <td style="text-align: right"><strong>% de lucro</strong></td>
+                            <td><?php echo $result->porcentagem * 100; ?> %</td>
+                        </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque</strong></td>
                             <td><?php echo $result->estoque; ?></td>

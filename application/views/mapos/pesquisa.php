@@ -11,8 +11,8 @@
     </div>
     <div class="span12" style="margin-left: 0; margin-top: 0">
     <!--Produtoss-->
-    <div class="span6" style="margin-left: 0; margin-top: 0">
-        <div class="widget-box" style="min-height: 200px">
+    <div class="span12" style="margin-left: 0; margin-top: 0">
+        <div class="widget-box" style="max-height: 350px; overflow:auto;">
             <div class="widget-title">
                 <span class="icon">
                     <i class="icon-barcode"></i>
@@ -63,10 +63,10 @@
             </div>
         </div>
     </div>
-
-
-    <!--Clientes-->
-    <div class="span6">
+	</div>
+    <div class="span12" style="margin:0px;">
+		<!--Clientes-->
+    <div class="span12">
         <div class="widget-box" style="min-height: 200px">
             <div class="widget-title">
                 <span class="icon">
@@ -121,8 +121,7 @@
         </div>
 
     </div>
-    </div>
-    
+	</div>
     <!--Serviços-->
     <div class="span6" style="margin-left: 0">
         <div class="widget-box" style="min-height: 200px">

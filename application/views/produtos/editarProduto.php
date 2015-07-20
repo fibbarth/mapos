@@ -31,11 +31,18 @@
                             <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>"  />
                         </div>
                     </div>
-
+					
+					<div class="control-group">
+                        <label for="precoVenda" class="control-label ">Porcentagem (%)<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="porcentagem" class="valor_porcentagem" type="text" name="porcentagem" value="<?php echo $result->porcentagem * 100; ?>"  />
+                        </div>
+                    </div>
+					
                     <div class="control-group">
                         <label for="precoVenda" class="control-label">Preço de Venda<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoVenda" class="money" type="text" name="precoVenda" value="<?php echo $result->precoVenda; ?>"  />
+                            <input id="precoVenda" class="money valor_porcentagem" type="text" name="precoVenda" value="<?php echo $result->precoVenda; ?>"  />
                         </div>
                     </div>
 
@@ -83,14 +90,16 @@
                   unidade: { required: true},
                   precoCompra: { required: true},
                   precoVenda: { required: true},
-                  estoque: { required: true}
+                  estoque: { required: true},
+				  porcentagem: {required : true}
             },
             messages:{
                   descricao: { required: 'Campo Requerido.'},
                   unidade: {required: 'Campo Requerido.'},
                   precoCompra: { required: 'Campo Requerido.'},
                   precoVenda: { required: 'Campo Requerido.'},
-                  estoque: { required: 'Campo Requerido.'}
+                  estoque: { required: 'Campo Requerido.'},
+                  porcentagem: { required: 'Campo Requerido.'}
             },
 
             errorClass: "help-inline",
@@ -104,8 +113,34 @@
             }
            });
     });
+	$('#precoCompra').on('keyup change', function(e){
+		$('#porcentagem').change();
+	});
+	$('#porcentagem').on('keyup change', function(e){
+		var code = e.keyCode || e.which;
+		if( code == 9 ){
+			return;
+		}
+		var porcentagem = $(this).val();
+		var precoCompra = $('#precoCompra').val();
+		if( porcentagem <= 0 ){
+			$('#precoVenda').val($('#precoCompra').val());
+			return;
+		}
+		var precoVenda = ( precoCompra * ( ( porcentagem/100 ) + 1 ) );
+		$('#precoVenda').val(precoVenda.toFixed(2));
+		return;
+	});
+	$('#precoVenda').on('keyup change', function(e){
+		var code = e.keyCode || e.which;
+		if( code == 9 ){
+			return;
+		}
+		var precoCompra = $('#precoCompra').val();
+		var precoVenda = $(this).val();
+		var porcentagem = ( ( ( precoVenda / precoCompra ) -1 ) * 100 );
+		
+		$('#porcentagem').val(porcentagem);
+		return;
+	});
 </script>
-
-
-
-
