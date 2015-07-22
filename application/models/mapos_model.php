@@ -124,7 +124,7 @@ class Mapos_model extends CI_Model {
 
     function getProdutosMinimo(){
 
-        $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo LIMIT 10"; 
+        $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo"; 
         return $this->db->query($sql)->result();
 
     }
