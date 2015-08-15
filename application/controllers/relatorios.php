@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Relatorios extends CI_Controller{
     public function __construct() {
@@ -38,8 +39,8 @@ class Relatorios extends CI_Controller{
            redirect(base_url());
         }
 
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
+        $dataInicial = implode("-",array_reverse(explode("/",$this->input->get('dataInicial'))));
+        $dataFinal = implode("-",array_reverse(explode("/",$this->input->get('dataFinal'))));
 
         $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial,$dataFinal);
 
@@ -180,8 +181,8 @@ class Relatorios extends CI_Controller{
            redirect(base_url());
         }
         
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
+        $dataInicial = implode("-",array_reverse(explode("/",$this->input->get('dataInicial'))));
+        $dataFinal = implode("-",array_reverse(explode("/",$this->input->get('dataFinal'))));;
         $cliente = $this->input->get('cliente');
         $responsavel = $this->input->get('responsavel');
         $status = $this->input->get('status');
@@ -227,8 +228,8 @@ class Relatorios extends CI_Controller{
            redirect(base_url());
         }
 
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
+        $dataInicial = implode("-",array_reverse(explode("/",$this->input->get('dataInicial'))));
+        $dataFinal = implode("-",array_reverse(explode("/",$this->input->get('dataFinal'))));
         $tipo = $this->input->get('tipo');
         $situacao = $this->input->get('situacao');
 
@@ -269,8 +270,8 @@ class Relatorios extends CI_Controller{
            $this->session->set_flashdata('error','Você não tem permissão para gerar relatórios de vendas.');
            redirect(base_url());
         }
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
+        $dataInicial = implode("-",array_reverse(explode("/",$this->input->get('dataInicial'))));
+        $dataFinal = implode("-",array_reverse(explode("/",$this->input->get('dataFinal'))));
         $cliente = $this->input->get('cliente');
         $responsavel = $this->input->get('responsavel');
 
