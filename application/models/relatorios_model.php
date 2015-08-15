@@ -209,8 +209,21 @@ class Relatorios_model extends CI_Model {
         if($responsavel != null){
             $whereResponsavel = "AND usuarios_id = ".$this->db->escape($responsavel);
         }
-       
-        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel";
-        return $this->db->query($query)->result();
+       /*
+        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel";*/
+		$this->db->select('
+			vendas.*,
+			clientes.nomeCliente, 
+			usuarios.nome,
+			SUM((itens_de_vendas.subTotal*itens_de_vendas.quantidade)) as total'
+		);
+		$this->db->from('vendas');
+        $this->db->join('clientes','clientes.idClientes = vendas.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+		$this->db->join('itens_de_vendas', 'itens_de_vendas.vendas_id = vendas.idVendas');
+		$this->db->where("idVendas != 0 $whereData $whereCliente $whereResponsavel");
+		$this->db->group_by('idVendas');
+					
+        return $this->db->get()->result();
     }
 }
